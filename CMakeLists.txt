@@ -3,4 +3,6 @@ project(Dungeon-of-Sorrows)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Dungeon-of-Sorrows main.cpp)
+add_executable(Dungeon-of-Sorrows main.cpp
+        Core/Game.cpp
+        Core/Game.h)
