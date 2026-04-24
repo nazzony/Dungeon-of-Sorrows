@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Dungeon-of-Sorrows main.cpp
         Core/Game.cpp
-        Core/Game.h)
+        Core/Game.h
+        World/Map.cpp
+        World/Map.h)
