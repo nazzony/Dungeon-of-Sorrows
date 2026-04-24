@@ -14,35 +14,29 @@ void Game::handleInput() {
 
         input = char(_getch());
 
-        std::cout << "You pressed letter: " << input << std::endl;
+        int targetX = player.getX();
+        int targetY = player.getY();
+        bool needToMove = false;
+
         switch (input) {
-            case 'w':
-                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
-                player.moveUp();
-                player.setPrev(grid.getCharAt(player.getX(), player.getY()));
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-                break;
-            case 's':
-                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
-                player.moveDown();
-                player.setPrev(grid.getCharAt(player.getX(), player.getY()));
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-                break;
-            case 'a':
-                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
-                player.moveLeft();
-                player.setPrev(grid.getCharAt(player.getX(), player.getY()));
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-                break;
-            case 'd':
-                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
-                player.moveRight();
-                player.setPrev(grid.getCharAt(player.getX(), player.getY()));
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-                break;
-            default:
-                break;
+            case 'w': targetY--; needToMove = true; break;
+            case 's': targetY++; needToMove = true; break;
+            case 'a': targetX--; needToMove = true; break;
+            case 'd': targetX++; needToMove = true; break;
+            default: break;
         }
+
+        if (needToMove && grid.isWalkable(targetX, targetY)) {
+            grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
+
+            player.setX(targetX);
+            player.setY(targetY);
+
+            player.setPrev(grid.getCharAt(player.getX(), player.getY()));
+
+            grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+        }
+
         if (input == 'q' || input == 'Q') isRunning = false;
 
     }

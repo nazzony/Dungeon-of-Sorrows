@@ -18,6 +18,8 @@ public:
 
     char getCharAt(int x, int y);
 
+    bool isWalkable(int x, int y);
+
 };
 
 
