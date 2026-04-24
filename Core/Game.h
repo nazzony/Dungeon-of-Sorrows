@@ -1,6 +1,7 @@
 #ifndef DUNGEON_OF_SORROWS_GAME_H
 #define DUNGEON_OF_SORROWS_GAME_H
 
+#include <windows.h>
 #include "../Entities/Player.h"
 #include <conio.h>
 #include <iostream>

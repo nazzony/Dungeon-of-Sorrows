@@ -5,6 +5,21 @@
 
 
 Game::Game() : isRunning{true}, player(5, 5) {
+
+    // flickering reduction
+
+    // Grab control of the Windows console
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cursorInfo;
+
+    // Get the current cursor settings, change visibility to false, and apply them
+    GetConsoleCursorInfo(consoleHandle, &cursorInfo);
+    cursorInfo.bVisible = false;
+    SetConsoleCursorInfo(consoleHandle, &cursorInfo);
+
+
+
+
     grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
     grid.revealArea(player.getX(), player.getY());
 }
@@ -45,6 +60,7 @@ void Game::handleInput() {
 }
 
 void Game::run() {
+    system("cls");
     render();
     while (isRunning) {
         handleInput();
@@ -54,7 +70,13 @@ void Game::run() {
 }
 
 void Game::render() {
-    system("cls");
+    // flickering reduction part 2
+    // Teleport the invisible cursor to the top-left corner
+    COORD cursorPosition;
+    cursorPosition.X = 0;
+    cursorPosition.Y = 0;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+
     grid.render();
 }
 
