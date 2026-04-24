@@ -14,6 +14,10 @@ public:
 
     void render();
 
+    void spawnEntity(int x, int y, char icon);
+
+    char getCharAt(int x, int y);
+
 };
 
 
