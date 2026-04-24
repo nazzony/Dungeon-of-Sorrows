@@ -12,7 +12,7 @@ private:
 public:
     Map();
 
-    std::string render();
+    void render();
 
 };
 

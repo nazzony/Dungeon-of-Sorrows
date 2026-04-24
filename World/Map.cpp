@@ -6,7 +6,7 @@ Map::Map() {
     roomGrid.push_back("####################");
 }
 
-std::string Map::render() {
+void Map::render() {
     for (auto line : roomGrid) {
         std::cout << line << std::endl;
     }
