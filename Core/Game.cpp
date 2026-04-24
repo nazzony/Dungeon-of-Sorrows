@@ -6,6 +6,7 @@
 
 Game::Game() : isRunning{true}, player(5, 5) {
     grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+    grid.revealArea(player.getX(), player.getY());
 }
 
 void Game::handleInput() {
@@ -35,6 +36,7 @@ void Game::handleInput() {
             player.setPrev(grid.getCharAt(player.getX(), player.getY()));
 
             grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+            grid.revealArea(player.getX(), player.getY());
         }
 
         if (input == 'q' || input == 'Q') isRunning = false;

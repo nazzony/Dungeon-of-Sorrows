@@ -8,6 +8,7 @@
 class Map {
 private:
     std::vector<std::string> roomGrid;
+    std::vector<std::vector<bool>> explored;
 
 public:
     Map();
@@ -19,6 +20,8 @@ public:
     char getCharAt(int x, int y);
 
     bool isWalkable(int x, int y);
+
+    void revealArea(int x, int y);
 
 };
 
