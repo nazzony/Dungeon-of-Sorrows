@@ -2,9 +2,11 @@
 #include <chrono>
 #include <thread>
 #include <cstdlib>
+#include <cmath>
 
 
-Game::Game() : isRunning{true}, player(5, 5) {
+Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6) {
+    actionMessage = "You Enter The Dark Dungeon...";
 
     // flickering reduction
 
@@ -17,15 +19,17 @@ Game::Game() : isRunning{true}, player(5, 5) {
     cursorInfo.bVisible = false;
     SetConsoleCursorInfo(consoleHandle, &cursorInfo);
 
-
-
+    // -------------
 
     grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
     grid.revealArea(player.getX(), player.getY());
+
+    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 }
 
 void Game::handleInput() {
     char input;
+    bool attacked = false;
     if (_kbhit()) {
 
         input = char(_getch());
@@ -42,20 +46,51 @@ void Game::handleInput() {
             default: break;
         }
 
-        if (needToMove && grid.isWalkable(targetX, targetY)) {
-            grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
+        if (needToMove) {
 
-            player.setX(targetX);
-            player.setY(targetY);
+            if (targetX == enemy.getX() && targetY == enemy.getY() && enemy.getHP() > 0) {
 
-            player.setPrev(grid.getCharAt(player.getX(), player.getY()));
+                enemy.takeDamage(1);
+                attacked = true;
+                actionMessage = "You Hit an Enemy! | Remaining HP: " + std::to_string(enemy.getHP());
+                grid.spawnEntity(targetX, targetY, '*');
+                render();
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                if (enemy.getHP() > 0) {
+                    grid.spawnEntity(targetX, targetY, 'E');
+                }
+                if (enemy.getHP() <= 0) {
+                    grid.spawnEntity(targetX, targetY, '.');
+                    actionMessage = "Congrats! You defeated an enemy";
+                }
 
-            grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-            grid.revealArea(player.getX(), player.getY());
+            }
+            else if (grid.isWalkable(targetX, targetY)) {
+
+                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
+
+                player.setX(targetX);
+                player.setY(targetY);
+
+                player.setPrev(grid.getCharAt(player.getX(), player.getY()));
+
+                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+                grid.revealArea(player.getX(), player.getY());
+
+            }
         }
-
         if (input == 'q' || input == 'Q') isRunning = false;
 
+        if (!attacked) {
+            int distX = std::abs(player.getX() - enemy.getX());
+            int distY = std::abs(player.getY() - enemy.getY());
+
+            if (distX <= 1 && distY <= 1 && enemy.getHP() > 0) {
+                actionMessage = "A hostile enemy is near. HP: " + std::to_string(enemy.getHP());
+            } else {
+                actionMessage = "You carefully tread through the shadows...";
+            }
+        }
     }
 }
 
@@ -78,6 +113,7 @@ void Game::render() {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 
     grid.render();
+    std::cout << std::endl << std::endl << actionMessage << "                         " << std::endl;
 }
 
 void Game::input() {

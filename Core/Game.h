@@ -5,13 +5,17 @@
 #include "../Entities/Player.h"
 #include <conio.h>
 #include <iostream>
+#include <string>
 #include "../World/Map.h"
+#include "../Entities/Enemy.h"
 
 class Game {
 private:
     bool isRunning;
     Map grid;
     Player player;
+    Enemy enemy;
+    std::string actionMessage;
 
 public:
     Game();

@@ -1,12 +1,19 @@
-//
-// Created by nazzony on 24.04.2026.
-//
-
 #ifndef DUNGEON_OF_SORROWS_ENEMY_H
 #define DUNGEON_OF_SORROWS_ENEMY_H
 
+#include "Entity.h"
 
-class Enemy {
+class Enemy : public Entity {
+private:
+    char icon;
+
+public:
+    Enemy(int x, int y);
+
+    char getIcon();
+
+    void setIcon(char n);
+
 };
 
 
