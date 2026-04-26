@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6) {
+Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6), currentLevel{1} {
     actionMessage = "You Enter The Dark Dungeon...";
 
     // flickering reduction
@@ -25,6 +25,8 @@ Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6) {
     grid.revealArea(player.getX(), player.getY());
 
     grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
+
+    grid.spawnEntity(18, 7, '>');
 }
 
 void Game::handleInput() {
@@ -64,6 +66,10 @@ void Game::handleInput() {
                     actionMessage = "Congrats! You defeated an enemy";
                 }
 
+            }
+            else if (grid.getCharAt(targetX, targetY) == '>') {
+                nextLevel();
+                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
             }
             else if (grid.isWalkable(targetX, targetY)) {
 
@@ -114,8 +120,25 @@ void Game::render() {
 
     grid.render();
     std::cout << std::endl << std::endl << actionMessage << "                         " << std::endl;
+    std::cout << "Depth: " << currentLevel;
 }
 
-void Game::input() {
+void Game::nextLevel() {
+    ++currentLevel;
 
+    grid = Map();
+
+    player.setX(5);
+    player.setY(5);
+    player.setPrev('.');
+
+    enemy.setX(3);
+    enemy.setY(8);
+    enemy.setHP(3);
+
+    grid.spawnEntity(18, 7, '>');
+
+    grid.revealArea(player.getX(), player.getY());
+
+    actionMessage = "You descend deeper into the dungeon...";
 }

@@ -16,6 +16,7 @@ private:
     Player player;
     Enemy enemy;
     std::string actionMessage;
+    int currentLevel;
 
 public:
     Game();
@@ -26,7 +27,7 @@ public:
 
     void render();
 
-    void input();
+    void nextLevel();
 
 };
 
