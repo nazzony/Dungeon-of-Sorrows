@@ -45,6 +45,11 @@ void Game::handleInput() {
             case 's': targetY++; needToMove = true; break;
             case 'a': targetX--; needToMove = true; break;
             case 'd': targetX++; needToMove = true; break;
+            case ' ':
+                if (player.getPrev() == '>') {
+                    nextLevel();
+                }
+                break;
             default: break;
         }
 
@@ -67,10 +72,6 @@ void Game::handleInput() {
                 }
 
             }
-            else if (grid.getCharAt(targetX, targetY) == '>') {
-                nextLevel();
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-            }
             else if (grid.isWalkable(targetX, targetY)) {
 
                 grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
@@ -91,7 +92,9 @@ void Game::handleInput() {
             int distX = std::abs(player.getX() - enemy.getX());
             int distY = std::abs(player.getY() - enemy.getY());
 
-            if (distX <= 1 && distY <= 1 && enemy.getHP() > 0) {
+            if (player.getPrev() == '>') {
+                actionMessage = "Press Space to Descend";
+            } else if (distX <= 1 && distY <= 1 && enemy.getHP() > 0) {
                 actionMessage = "A hostile enemy is near. HP: " + std::to_string(enemy.getHP());
             } else {
                 actionMessage = "You carefully tread through the shadows...";
@@ -131,12 +134,15 @@ void Game::nextLevel() {
     player.setX(5);
     player.setY(5);
     player.setPrev('.');
+    grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
 
     enemy.setX(3);
     enemy.setY(8);
     enemy.setHP(3);
+    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 
     grid.spawnEntity(18, 7, '>');
+
 
     grid.revealArea(player.getX(), player.getY());
 

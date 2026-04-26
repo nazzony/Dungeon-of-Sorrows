@@ -36,7 +36,7 @@ char Map::getCharAt(int x, int y) { return roomGrid[y][x]; }
 
 bool Map::isWalkable(int x, int y) {
     if (x < 0 || x > roomGrid[0].size()
-        || y < 0 || y > roomGrid.size()
+        || y < 0 || y >= roomGrid.size()
         || roomGrid[y][x] == '#') {
         return false;
     }
