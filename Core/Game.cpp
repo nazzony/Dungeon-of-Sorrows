@@ -77,7 +77,7 @@ void Game::handleInput() {
                     grid.spawnEntity(targetX, targetY, 'E');
                 }
                 if (enemy.getHP() <= 0) {
-                    grid.spawnEntity(targetX, targetY, '.');
+                    grid.spawnEntity(targetX, targetY, char(250));
                     actionMessage = "Congrats! You defeated an enemy";
                 }
 

@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(int xPos, int yPos) : x{0}, y{0}, prev{'.'}, hp{100} {
+Entity::Entity(int xPos, int yPos) : x{0}, y{0}, prev{char(249)}, hp{100} {
     setX(xPos);
     setY(yPos);
 }

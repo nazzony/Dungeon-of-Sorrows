@@ -1,10 +1,8 @@
 #include "Map.h"
+#include <cstdlib>
 
 Map::Map() {
-    roomGrid.push_back("####################");
-    for (int i = 0; i < 8; ++i)
-        roomGrid.push_back("#..................#");
-    roomGrid.push_back("####################");
+    drunkardsWalk();
 
     for (int y = 0; y < roomGrid.size(); ++y) {
         std::vector<bool> row;
@@ -59,3 +57,28 @@ void Map::revealArea(int x, int y) {
 
 }
 
+void Map::drunkardsWalk() {
+    for (int i = 0; i < 20; ++i) {
+        roomGrid.push_back(std::string(20,'#'));
+    }
+    int digX = 5;
+    int digY = 5;
+
+    for (int i = 0; i < 100; ++i) {
+        roomGrid[digY][digX] = char(249);
+
+        switch (rand() % 4) {
+            default: break;
+
+            case 0: digY--; break;
+            case 1: digY++; break;
+            case 2: digX--; break;
+            case 3: digX++; break;
+        }
+
+        if (digY <= 0) digY = 1;
+        if (digY >= 19) digY = 18;
+        if (digX <= 0) digX = 1;
+        if (digX >= 19) digX = 18;
+    }
+}

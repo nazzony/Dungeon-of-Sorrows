@@ -23,6 +23,8 @@ public:
 
     void revealArea(int x, int y);
 
+    void drunkardsWalk();
+
 };
 
 
