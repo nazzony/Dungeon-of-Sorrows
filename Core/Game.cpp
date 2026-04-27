@@ -60,9 +60,19 @@ void Game::handleInput() {
                 enemy.takeDamage(1);
                 attacked = true;
                 actionMessage = "You Hit an Enemy! | Remaining HP: " + std::to_string(enemy.getHP());
-                grid.spawnEntity(targetX, targetY, '*');
+
+                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
+                grid.spawnEntity(enemy.getX(), enemy.getY(), player.getIcon());
+
                 render();
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+
+                grid.spawnEntity(targetX, targetY, '*');
+                render();
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
                 if (enemy.getHP() > 0) {
                     grid.spawnEntity(targetX, targetY, 'E');
                 }
@@ -139,7 +149,7 @@ void Game::nextLevel() {
     enemy.setX(3);
     enemy.setY(8);
     enemy.setHP(3);
-    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
+        grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 
     grid.spawnEntity(18, 7, '>');
 

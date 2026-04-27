@@ -20,9 +20,9 @@ void Map::render() {
     for (int y = 0; y < roomGrid.size(); ++y) {
         for (int x = 0; x < roomGrid[y].size(); ++x) {
             if (explored[y][x] == true) {
-                std::cout << roomGrid[y][x];
+                std::cout << roomGrid[y][x] << " ";
             } else {
-                std::cout << ' ';
+                std::cout << "  ";
             }
         }
         std::cout << std::endl;
