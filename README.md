@@ -5,6 +5,12 @@
 
 **Current Version:** Game Engine v1.0
 
+## 🚀 Roadmap
+
+- [ ] Transition from a single Enemy to an Entity Manager.
+- [ ] Implement a collectible Item/Loot system (Gold, Health Potions).
+- [ ] Expand the UI to include an event log and player stats.
+
 ## 🎮 Core Features
 
 * **Custom Game Engine:** Implements a standard, non-blocking `Input -> Update -> Render` game loop using `<conio.h>`.
@@ -22,15 +28,8 @@
 * **Libraries:** Standard Template Library (`<iostream>`, `<vector>`, `<string>`) and OS-specific console input headers.
 * **Environment:** Designed to run via standard terminal/command line.
 
-## 🚀 Roadmap
-
-- [ ] Transition from a single Enemy to an Entity Manager.
-- [ ] Implement a collectible Item/Loot system (Gold, Health Potions).
-- [ ] Expand the UI to include an event log and player stats.
-
 ## 🚀 How to Run (Upcoming)
 
 *Instructions for compiling and running the executable will be added as development progresses.*
 
 ---
-
