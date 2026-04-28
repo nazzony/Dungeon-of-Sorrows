@@ -28,6 +28,8 @@ public:
 
     void takeDamage(int n);
 
+
+
 };
 
 

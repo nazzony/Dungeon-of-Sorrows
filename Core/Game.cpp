@@ -5,9 +5,7 @@
 #include <cmath>
 
 
-Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6), currentLevel{1} {
-    actionMessage = "You Enter The Dark Dungeon...";
-
+Game::Game() : isRunning{true}, player(1 , 1), enemy(1, 1), currentLevel{1} {
     // flickering reduction
 
     // Grab control of the Windows console
@@ -20,13 +18,40 @@ Game::Game() : isRunning{true}, player(5, 5), enemy(15, 6), currentLevel{1} {
     SetConsoleCursorInfo(consoleHandle, &cursorInfo);
 
     // -------------
+    actionMessage = "You Enter The Dark Dungeon...";
 
+    player.setX(grid.getStartX());
+    player.setY(grid.getStartY());
+    player.setPrev(char(249));
     grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
     grid.revealArea(player.getX(), player.getY());
 
+    int randX, randY;
+
+    bool foundSafeSpot = false;
+    while (!foundSafeSpot) {
+        randX = rand() % 38 + 1;
+        randY = rand() % 18 + 1;
+
+        if (grid.getCharAt(randX, randY) == char(249)) {
+            foundSafeSpot = true;
+        }
+    }
+    enemy.setX(randX);
+    enemy.setY(randY);
+    enemy.setPrev(char(249));
     grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 
-    grid.spawnEntity(18, 7, '>');
+    foundSafeSpot = false;
+    while (!foundSafeSpot) {
+        randX = rand() % 38 + 1;
+        randY = rand() % 18 + 1;
+
+        if (grid.getCharAt(randX, randY) == char(249)) {
+            foundSafeSpot = true;
+        }
+    }
+    grid.spawnEntity(randX, randY, '>');
 }
 
 void Game::handleInput() {
@@ -141,20 +166,39 @@ void Game::nextLevel() {
 
     grid = Map();
 
-    player.setX(5);
-    player.setY(5);
-    player.setPrev('.');
+    actionMessage = "You descend deeper into the dungeon...";
+
+    player.setX(grid.getStartX());
+    player.setY(grid.getStartY());
+    player.setPrev(char(249));
     grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
-
-    enemy.setX(3);
-    enemy.setY(8);
-    enemy.setHP(3);
-        grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
-
-    grid.spawnEntity(18, 7, '>');
-
-
     grid.revealArea(player.getX(), player.getY());
 
-    actionMessage = "You descend deeper into the dungeon...";
+    int randX, randY;
+
+    bool foundSafeSpot = false;
+    while (!foundSafeSpot) {
+        randX = rand() % 38 + 1;
+        randY = rand() % 18 + 1;
+
+        if (grid.getCharAt(randX, randY) == char(249)) {
+            foundSafeSpot = true;
+        }
+    }
+    enemy.setX(randX);
+    enemy.setY(randY);
+    enemy.setPrev(char(249));
+    enemy.setHP(3);
+    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
+
+    foundSafeSpot = false;
+    while (!foundSafeSpot) {
+        randX = rand() % 38 + 1;
+        randY = rand() % 18 + 1;
+
+        if (grid.getCharAt(randX, randY) == char(249)) {
+            foundSafeSpot = true;
+        }
+    }
+    grid.spawnEntity(randX, randY, '>');
 }

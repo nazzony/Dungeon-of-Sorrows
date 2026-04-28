@@ -59,12 +59,15 @@ void Map::revealArea(int x, int y) {
 
 void Map::drunkardsWalk() {
     for (int i = 0; i < 20; ++i) {
-        roomGrid.push_back(std::string(20,'#'));
+        roomGrid.push_back(std::string(40,'#'));
     }
-    int digX = 5;
-    int digY = 5;
+    startX = rand() % 38 + 1;
+    startY = rand() % 18 + 1;
 
-    for (int i = 0; i < 100; ++i) {
+    int digX = startX;
+    int digY = startY;
+
+    for (int i = 0; i < 600; ++i) {
         roomGrid[digY][digX] = char(249);
 
         switch (rand() % 4) {
@@ -79,6 +82,9 @@ void Map::drunkardsWalk() {
         if (digY <= 0) digY = 1;
         if (digY >= 19) digY = 18;
         if (digX <= 0) digX = 1;
-        if (digX >= 19) digX = 18;
+        if (digX >= 39) digX = 38;
     }
 }
+
+int Map::getStartX() { return startX; }
+int Map::getStartY() { return startY; }

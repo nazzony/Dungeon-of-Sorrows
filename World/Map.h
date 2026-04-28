@@ -10,6 +10,9 @@ private:
     std::vector<std::string> roomGrid;
     std::vector<std::vector<bool>> explored;
 
+    int startX;
+    int startY;
+
 public:
     Map();
 
@@ -24,6 +27,9 @@ public:
     void revealArea(int x, int y);
 
     void drunkardsWalk();
+
+    int getStartX();
+    int getStartY();
 
 };
 

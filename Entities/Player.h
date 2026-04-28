@@ -10,6 +10,7 @@ public:
     Player(int xPos, int yPos);
 
     char getIcon();
+
 };
 
 
