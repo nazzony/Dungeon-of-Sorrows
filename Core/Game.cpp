@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-Game::Game() : isRunning{true}, player(1 , 1), enemy(1, 1), currentLevel{1} {
+Game::Game() : isRunning{true}, player(1 , 1), currentLevel{1} {
     // flickering reduction
 
     // Grab control of the Windows console
@@ -20,6 +20,7 @@ Game::Game() : isRunning{true}, player(1 , 1), enemy(1, 1), currentLevel{1} {
     // -------------
     actionMessage = "You Enter The Dark Dungeon...";
 
+    // Player Spawner
     player.setX(grid.getStartX());
     player.setY(grid.getStartY());
     player.setPrev(char(249));
@@ -37,11 +38,31 @@ Game::Game() : isRunning{true}, player(1 , 1), enemy(1, 1), currentLevel{1} {
             foundSafeSpot = true;
         }
     }
-    enemy.setX(randX);
-    enemy.setY(randY);
-    enemy.setPrev(char(249));
-    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 
+    //Enemy spawner
+    int maxEnemies = 3;
+
+    for (int i = 0; i < maxEnemies; ++i) {
+
+        foundSafeSpot = false;
+
+        while (!foundSafeSpot) {
+            randX = rand() % 38 + 1;
+            randY = rand() % 18 + 1;
+
+            if (grid.getCharAt(randX, randY) == char(249) &&
+            !(randX == player.getX() && randY == player.getY())) {
+                foundSafeSpot = true;
+            }
+        }
+
+        Enemy enemy(randX, randY);
+        enemy.setPrev(char(249));
+        grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
+        enemies.push_back(enemy);
+    }
+
+    // Exit spawner
     foundSafeSpot = false;
     while (!foundSafeSpot) {
         randX = rand() % 38 + 1;
@@ -80,34 +101,37 @@ void Game::handleInput() {
 
         if (needToMove) {
 
-            if (targetX == enemy.getX() && targetY == enemy.getY() && enemy.getHP() > 0) {
+            for (Enemy& enemy : enemies) {
+                if (targetX == enemy.getX() && targetY == enemy.getY() && enemy.getHP() > 0) {
 
-                enemy.takeDamage(1);
-                attacked = true;
-                actionMessage = "You Hit an Enemy! | Remaining HP: " + std::to_string(enemy.getHP());
+                    enemy.takeDamage(1);
+                    attacked = true;
+                    actionMessage = "You Hit an Enemy! | Remaining HP: " + std::to_string(enemy.getHP());
 
-                grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
-                grid.spawnEntity(enemy.getX(), enemy.getY(), player.getIcon());
+                    grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
+                    grid.spawnEntity(enemy.getX(), enemy.getY(), player.getIcon());
 
-                render();
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    render();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-                grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
+                    grid.spawnEntity(player.getX(), player.getY(), player.getIcon());
 
-                grid.spawnEntity(targetX, targetY, '*');
-                render();
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                    grid.spawnEntity(targetX, targetY, '*');
+                    render();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-                if (enemy.getHP() > 0) {
-                    grid.spawnEntity(targetX, targetY, 'E');
+                    if (enemy.getHP() > 0) {
+                        grid.spawnEntity(targetX, targetY, 'E');
+                    }
+                    if (enemy.getHP() <= 0) {
+                        grid.spawnEntity(targetX, targetY, char(250));
+                        actionMessage = "Congrats! You defeated an enemy";
+                    }
+                    break;
                 }
-                if (enemy.getHP() <= 0) {
-                    grid.spawnEntity(targetX, targetY, char(250));
-                    actionMessage = "Congrats! You defeated an enemy";
-                }
-
             }
-            else if (grid.isWalkable(targetX, targetY)) {
+
+            if (!attacked && grid.isWalkable(targetX, targetY)) {
 
                 grid.spawnEntity(player.getX(), player.getY(), player.getPrev());
 
@@ -120,19 +144,36 @@ void Game::handleInput() {
                 grid.revealArea(player.getX(), player.getY());
 
             }
+
         }
+
         if (input == 'q' || input == 'Q') isRunning = false;
 
         if (!attacked) {
-            int distX = std::abs(player.getX() - enemy.getX());
-            int distY = std::abs(player.getY() - enemy.getY());
-
             if (player.getPrev() == '>') {
                 actionMessage = "Press Space to Descend";
-            } else if (distX <= 1 && distY <= 1 && enemy.getHP() > 0) {
-                actionMessage = "A hostile enemy is near. HP: " + std::to_string(enemy.getHP());
-            } else {
-                actionMessage = "You carefully tread through the shadows...";
+            }
+            else {
+                bool enemyNear = false;
+                int enemyHp = 0;
+
+                for (Enemy& enemy : enemies) {
+                    int distX = std::abs(player.getX() - enemy.getX());
+                    int distY = std::abs(player.getY() - enemy.getY());
+
+                    if (distX <= 1 && distY <= 1 && enemy.getHP() > 0) {
+                        enemyNear = true;
+                        enemyHp = enemy.getHP();
+                        break;
+                    }
+                }
+
+                if (enemyNear) {
+                    actionMessage = "A hostile enemy is near. HP: " + std::to_string(enemyHp);
+                } else {
+                    actionMessage = "You carefully tread through the shadows...";
+                }
+
             }
         }
     }
@@ -168,6 +209,7 @@ void Game::nextLevel() {
 
     actionMessage = "You descend deeper into the dungeon...";
 
+    // Player spawner
     player.setX(grid.getStartX());
     player.setY(grid.getStartY());
     player.setPrev(char(249));
@@ -185,12 +227,32 @@ void Game::nextLevel() {
             foundSafeSpot = true;
         }
     }
-    enemy.setX(randX);
-    enemy.setY(randY);
-    enemy.setPrev(char(249));
-    enemy.setHP(3);
-    grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
 
+    //Enemy spawner
+    enemies.clear();
+    int maxEnemies = 3;
+
+    for (int i = 0; i < maxEnemies; ++i) {
+
+        foundSafeSpot = false;
+
+        while (!foundSafeSpot) {
+            randX = rand() % 38 + 1;
+            randY = rand() % 18 + 1;
+
+            if (grid.getCharAt(randX, randY) == char(249) &&
+            !(randX == player.getX() && randY == player.getY())) {
+                foundSafeSpot = true;
+            }
+        }
+
+        Enemy enemy(randX, randY);
+        enemy.setPrev(char(249));
+        grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
+        enemies.push_back(enemy);
+    }
+
+    // Exit spawner
     foundSafeSpot = false;
     while (!foundSafeSpot) {
         randX = rand() % 38 + 1;

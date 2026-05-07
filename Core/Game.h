@@ -5,6 +5,7 @@
 #include "../Entities/Player.h"
 #include <conio.h>
 #include <iostream>
+#include <vector>
 #include <string>
 #include "../World/Map.h"
 #include "../Entities/Enemy.h"
@@ -14,7 +15,7 @@ private:
     bool isRunning;
     Map grid;
     Player player;
-    Enemy enemy;
+    std::vector<Enemy> enemies;
     std::string actionMessage;
     int currentLevel;
 
