@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(int x, int y) : Entity(x, y, 4), icon{'E'} {
-    hp = 3;
+Enemy::Enemy(int x, int y) : Actor(x, y, 4), icon{'E'} {
+    setHP(3);
 }
 
 char Enemy::getIcon() { return icon; }

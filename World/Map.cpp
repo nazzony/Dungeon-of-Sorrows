@@ -32,6 +32,8 @@ void Map::render() {
                     setConsoleColor(8);
                 } else if (c == '>') {
                     setConsoleColor(5);
+                } else if (c == '*') {
+                    setConsoleColor(14);
                 }
 
                 std::cout << roomGrid[y][x] << " ";

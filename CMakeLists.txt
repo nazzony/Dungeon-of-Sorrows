@@ -16,4 +16,8 @@ add_executable(Dungeon-of-Sorrows main.cpp
         Entities/Enemy.cpp
         Entities/Enemy.h
         utilities.cpp
-        utilities.h)
+        utilities.h
+        Entities/Item.cpp
+        Entities/Item.h
+        Entities/Actor.cpp
+        Entities/Actor.h)

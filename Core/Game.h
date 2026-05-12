@@ -4,20 +4,28 @@
 #include <windows.h>
 #include "../Entities/Player.h"
 #include <conio.h>
-#include <iostream>
 #include <vector>
 #include <string>
 #include "../World/Map.h"
 #include "../Entities/Enemy.h"
+#include "../Entities/Item.h"
 
 class Game {
 private:
     bool isRunning;
+
     Map grid;
+
     Player player;
+
     std::vector<Enemy> enemies;
+
     std::string actionMessage;
+
     int currentLevel;
+
+    std::vector<Item> items;
+    int currentGold = 0;
 
 public:
     Game();

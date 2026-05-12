@@ -62,6 +62,29 @@ Game::Game() : isRunning{true}, player(1 , 1), currentLevel{1} {
         enemies.push_back(enemy);
     }
 
+    // Item Spawner
+    int maxItems = 4;
+
+    for (int i = 0; i < maxItems; ++i) {
+
+        foundSafeSpot = false;
+
+        while (!foundSafeSpot) {
+            randX = rand() % 38 + 1;
+            randY = rand() % 18 + 1;
+
+            if (grid.getCharAt(randX, randY) == char(249) &&
+            !(randX == player.getX() && randY == player.getY())) {
+                foundSafeSpot = true;
+            }
+        }
+
+        Item item(randX, randY);
+        item.setPrev(char(249));
+        grid.spawnEntity(item.getX(), item.getY(), item.getIcon());
+        items.push_back(item);
+    }
+
     // Exit spawner
     foundSafeSpot = false;
     while (!foundSafeSpot) {
@@ -78,6 +101,8 @@ Game::Game() : isRunning{true}, player(1 , 1), currentLevel{1} {
 void Game::handleInput() {
     char input;
     bool attacked = false;
+    bool pickedUpItem = false;
+
     if (_kbhit()) {
 
         input = char(_getch());
@@ -124,9 +149,31 @@ void Game::handleInput() {
                         grid.spawnEntity(targetX, targetY, 'E');
                     }
                     if (enemy.getHP() <= 0) {
-                        grid.spawnEntity(targetX, targetY, char(250));
+                        grid.spawnEntity(targetX, targetY, char(249));
                         actionMessage = "Congrats! You defeated an enemy";
                     }
+                    break;
+                }
+            }
+
+
+
+            for (int i = 0; i < items.size(); ++i) {
+                if (targetX == items[i].getX() && targetY == items[i].getY()) {
+
+                    if (items[i].getLootType() == 0) {
+                        player.setHP(player.getHP() + 3);
+                        actionMessage = "You found a glowing Potion! +3 HP";
+                    } else if (items[i].getLootType() == 1) {
+                        int foundGold = rand() % 20 + 30;
+                        currentGold += foundGold;
+                        actionMessage = "You found a stash of coins! +" + std::to_string(foundGold) + " Gold";
+                    }
+
+                    grid.spawnEntity(targetX, targetY, char(249));
+                    items.erase(items.begin() + i);
+
+                    pickedUpItem = true;
                     break;
                 }
             }
@@ -149,7 +196,7 @@ void Game::handleInput() {
 
         if (input == 'q' || input == 'Q') isRunning = false;
 
-        if (!attacked) {
+        if (!attacked && !pickedUpItem) {
             if (player.getPrev() == '>') {
                 actionMessage = "Press Space to Descend";
             }
@@ -199,7 +246,7 @@ void Game::render() {
 
     grid.render();
     std::cout << std::endl << std::endl << actionMessage << "                         " << std::endl;
-    std::cout << "Depth: " << currentLevel;
+    std::cout << "Depth: " << currentLevel << "   |   HP: " << player.getHP() << "   |   Gold: " << currentGold << "    ";
 }
 
 void Game::nextLevel() {
@@ -250,6 +297,30 @@ void Game::nextLevel() {
         enemy.setPrev(char(249));
         grid.spawnEntity(enemy.getX(), enemy.getY(), enemy.getIcon());
         enemies.push_back(enemy);
+    }
+
+    // Item Spawner
+    items.clear();
+    int maxItems = 4;
+
+    for (int i = 0; i < maxItems; ++i) {
+
+        foundSafeSpot = false;
+
+        while (!foundSafeSpot) {
+            randX = rand() % 38 + 1;
+            randY = rand() % 18 + 1;
+
+            if (grid.getCharAt(randX, randY) == char(249) &&
+            !(randX == player.getX() && randY == player.getY())) {
+                foundSafeSpot = true;
+            }
+        }
+
+        Item item(randX, randY);
+        item.setPrev(char(249));
+        grid.spawnEntity(item.getX(), item.getY(), item.getIcon());
+        items.push_back(item);
     }
 
     // Exit spawner

@@ -1,9 +1,9 @@
 #ifndef DUNGEON_OF_SORROWS_PLAYER_H
 #define DUNGEON_OF_SORROWS_PLAYER_H
 
-#include "Entity.h"
+#include "Actor.h"
 
-class Player : public Entity {
+class Player : public Actor {
 private:
     char icon;
 public:

@@ -7,7 +7,6 @@ protected:
     int x;
     int y;
     char prev;
-    int hp;
     int color;
 public:
     Entity(int x, int y, int color);
@@ -15,23 +14,17 @@ public:
     int getX();
     int getY();
     char getPrev();
-    int getHP();
     int getColor();
 
     void setX(int n);
     void setY(int n);
     void setPrev(char n);
-    void setHP(int n);
     void setColor(int colorCode);
 
     void moveUp();
     void moveDown();
     void moveLeft();
     void moveRight();
-
-    void takeDamage(int n);
-
-
 
 };
 
