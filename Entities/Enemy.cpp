@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(int x, int y) : Entity(x, y), icon{'E'} {
+Enemy::Enemy(int x, int y) : Entity(x, y, 4), icon{'E'} {
     hp = 3;
 }
 

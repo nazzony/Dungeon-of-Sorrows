@@ -1,0 +1,6 @@
+#ifndef DUNGEON_OF_SORROWS_UTILITIES_H
+#define DUNGEON_OF_SORROWS_UTILITIES_H
+
+void setConsoleColor(int colorCode);
+
+#endif //DUNGEON_OF_SORROWS_UTILITIES_H

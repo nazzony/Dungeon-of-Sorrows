@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <cstdlib>
+#include "../utilities.h"
 
 Map::Map() {
     drunkardsWalk();
@@ -17,7 +18,22 @@ void Map::render() {
 
     for (int y = 0; y < roomGrid.size(); ++y) {
         for (int x = 0; x < roomGrid[y].size(); ++x) {
+
             if (explored[y][x] == true) {
+                char c = roomGrid[y][x];
+
+                if (c == '@') {
+                    setConsoleColor(1);
+                } else if (c == 'E') {
+                    setConsoleColor(4);
+                } else if (c == char(249)) {
+                    setConsoleColor(7);
+                } else  if (c == '#') {
+                    setConsoleColor(8);
+                } else if (c == '>') {
+                    setConsoleColor(5);
+                }
+
                 std::cout << roomGrid[y][x] << " ";
             } else {
                 std::cout << "  ";
@@ -25,6 +41,7 @@ void Map::render() {
         }
         std::cout << std::endl;
     }
+    setConsoleColor(7);
 
 }
 
