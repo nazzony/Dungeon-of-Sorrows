@@ -2,7 +2,8 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "Core/Game.h"
+#include "utilities.h"
+#include "Core/GameEngine.h"
 
 using namespace std;
 
@@ -10,8 +11,9 @@ int main() {
 
     srand(time(0));
 
-    Game game;
+    hideCursor();
 
-    game.run();
+    GameEngine engine;
+    engine.run();
 
 }

@@ -3,21 +3,10 @@
 #include <thread>
 #include <cstdlib>
 #include <cmath>
+#include <execution>
 
 
 Game::Game() : isRunning{true}, player(1 , 1), currentLevel{1} {
-    // flickering reduction
-
-    // Grab control of the Windows console
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO cursorInfo;
-
-    // Get the current cursor settings, change visibility to false, and apply them
-    GetConsoleCursorInfo(consoleHandle, &cursorInfo);
-    cursorInfo.bVisible = false;
-    SetConsoleCursorInfo(consoleHandle, &cursorInfo);
-
-    // -------------
     actionMessage = "You Enter The Dark Dungeon...";
 
     // Player Spawner
@@ -224,6 +213,7 @@ void Game::handleInput() {
             }
         }
     }
+    if (player.getHP() <= 0) { isRunning = false; }
 }
 
 void Game::run() {
@@ -237,8 +227,7 @@ void Game::run() {
 }
 
 void Game::render() {
-    // flickering reduction part 2
-    // Teleport the invisible cursor to the top-left corner
+    // get rid of flickering
     COORD cursorPosition;
     cursorPosition.X = 0;
     cursorPosition.Y = 0;
@@ -335,3 +324,7 @@ void Game::nextLevel() {
     }
     grid.spawnEntity(randX, randY, '>');
 }
+
+int Game::getCurrentGold() { return currentGold; }
+int Game::getCurrentLevel() { return currentLevel; }
+bool Game::isPlayerDead() { return player.getHP() <= 0; }

@@ -38,6 +38,9 @@ public:
 
     void nextLevel();
 
+    int getCurrentLevel();
+    int getCurrentGold();
+    bool isPlayerDead();
 };
 
 
