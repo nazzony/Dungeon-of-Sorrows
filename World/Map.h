@@ -16,7 +16,7 @@ private:
 public:
     Map();
 
-    void render();
+    void render(int startX, int startY);
 
     void spawnEntity(int x, int y, char icon);
 

@@ -5,6 +5,8 @@
 #include <cmath>
 #include <execution>
 
+#include "../utilities.h"
+
 
 Game::Game() : isRunning{true}, player(1 , 1), currentLevel{1} {
     actionMessage = "You Enter The Dark Dungeon...";
@@ -227,15 +229,36 @@ void Game::run() {
 }
 
 void Game::render() {
-    // get rid of flickering
-    COORD cursorPosition;
-    cursorPosition.X = 0;
-    cursorPosition.Y = 0;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+    gotoXY(0, 0);
 
-    grid.render();
-    std::cout << std::endl << std::endl << actionMessage << "                         " << std::endl;
-    std::cout << "Depth: " << currentLevel << "   |   HP: " << player.getHP() << "   |   Gold: " << currentGold << "    ";
+    drawWindow(0, 0, 84, 22, "DUNGEON", 4);
+
+    grid.render(2, 1);
+
+    int uiX = 85;
+    int uiWidth = 45;
+
+    // player stats
+    drawWindow(uiX, 1, uiWidth, 7, "PLAYER STATS", 11);
+
+    setConsoleColor(7); // Normal text
+    gotoXY(uiX + 2, 3); std::cout << "Depth: " << currentLevel;
+    gotoXY(uiX + 2, 4); std::cout << "HP:    " << player.getHP() << "   ";
+    gotoXY(uiX + 2, 5); std::cout << "Gold:  " << currentGold << "   ";
+
+    // action log
+    drawWindow(uiX, 9, uiWidth, 6, "ACTION LOG", 14);
+
+    std::string paddedMessage = actionMessage;
+    while (paddedMessage.length() < uiWidth - 4) {
+        paddedMessage += " ";
+    }
+
+    setConsoleColor(7);
+    gotoXY(uiX + 2, 11);
+    std::cout << paddedMessage;
+
+    gotoXY(0, 22);
 }
 
 void Game::nextLevel() {

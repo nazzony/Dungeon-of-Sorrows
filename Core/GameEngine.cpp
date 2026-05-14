@@ -1,6 +1,9 @@
 #include "GameEngine.h"
+#include <vector>
+#include <string>
 
-GameEngine::GameEngine() : currentState{MAIN_MENU}, lastDepth{1}, lastGold{0} {}
+GameEngine::GameEngine() : currentState{MAIN_MENU}, lastDepth{1}, lastGold{0} {
+}
 
 void GameEngine::run() {
     while (currentState != EXIT) {
@@ -16,42 +19,79 @@ void GameEngine::run() {
 
 void GameEngine::stateMainMenu() {
     system("cls");
+    Sleep(50);
+
+    //for clion use 0
+    //for bash use 1
+    bool terminal = 0;
+    int menuX;
+    int menuY;
+    int mult;
+
+    if (!terminal) {
+        menuX = 40;
+        menuY = 0;
+        mult = 1;
+    } else {
+        menuX = 55;
+        menuY = 3;
+        mult = 2;
+    }
+
     setConsoleColor(1);
-    std::cout << R"(
-                                                                      ____  __  __  _   __  ______  ______  ____   _   __
-                                                                     / __ \/ / / / / | / / / ____/ / ____/ / __ \ / | / /
-                                                                    / / / / / / / /  |/ / / / __  / __/   / / / //  |/ /
-                                                                   / /_/ / /_/ / / /|  / / /_/ / / /___  / /_/ // /|  /
-                                                                  /_____/\____/ /_/ |_/  \____/ /_____/  \____//_/ |_/
 
-                                                                                         ____   ______
-                                                                                        / __ \ / ____/
-                                                                                       / / / // /_
-                                                                                      / /_/ // __/
-                                                                                      \____//_/
+    std::vector<std::string> title = {
+        "    ____  __  __  _   __  ______  ______  ____   _   __",
+        "   / __ \\/ / / / / | / / / ____/ / ____/ / __ \\ / | / /",
+        "  / / / / / / / /  |/ / / / __  / __/   / / / //  |/ /",
+        " / /_/ / /_/ / / /|  / / /_/ / / /___  / /_/ // /|  /",
+        "/_____/\\____/ /_/ |_/  \\____/ /_____/  \\____//_/ |_/",
+        "\t",
+        "\t\t   ____   ______",
+        "\t\t  / __ \\ / ____/",
+        "\t\t / / / // /_",
+        "\t\t/ /_/ // __/",
+        "\t\t\\____//_/",
+        "\t",
+        "   _____   ____   ____   ____   ____  _       __  _____",
+        "  / ___/  / __ \\ / __ \\ / __ \\ / __ \\| |     / / / ___/",
+        "  \\__ \\  / / / // /_/ // /_/ // / / /| | /| / /  \\__ \\",
+        " ___/ / / /_/ // _, _// _, _// /_/ / | |/ |/ /  ___/ /",
+        "/____/  \\____//_/ |_|/_/ |_| \\____/  |__/|__/  /____/"
+    };
 
-                                                                     _____   ____   ____   ____   ____  _       __  _____
-                                                                    / ___/  / __ \ / __ \ / __ \ / __ \| |     / / / ___/
-                                                                   \__ \  / / / // /_/ // /_/ // / / /| | /| / /  \__ \
-                                                                  ___/ / / /_/ // _, _// _, _// /_/ / | |/ |/ /  ___/ /
-                                                                 /____/  \____//_/ |_|/_/ |_| \____/  |__/|__/  /____/
-    )" << '\n';
+    for (int i = 0; i < title.size(); ++i) {
+        gotoXY(menuX, menuY + i);
+        std::cout << title[i] << std::flush;
+    }
 
-    setConsoleColor(7);  // Reset to Gray for the menu options
+    menuY = menuY + title.size() + 1;
 
-    std::cout << "\t                                                     ==============================================================\n";
-    setConsoleColor(14);
-    std::cout << "\t                                                                              [1] Play                    \n";
-    std::cout << "\t                                                                              [2] Unlocks                 \n";
-    std::cout << "\t                                                                              [3] Settings                \n";
-    std::cout << "\t                                                                              [4] Quit                    \n";
     setConsoleColor(7);
-    std::cout << "\t                                                     ==============================================================\n";
-    std::cout << "\t                                                                        Press a number to continue        \n";
+    gotoXY(menuX - 4, menuY);
+    std::cout << "==============================================================" << std::flush;
+
+    int textOffset = 23;
+    setConsoleColor(14);
+    gotoXY(menuX + textOffset, menuY + 1 * mult);
+    std::cout << "[1] Play" << std::flush;
+    gotoXY(menuX + textOffset, menuY + 2 * mult);
+    std::cout << "[2] Unlocks" << std::flush;
+    gotoXY(menuX + textOffset, menuY + 3 * mult);
+    std::cout << "[3] Settings" << std::flush;
+    gotoXY(menuX + textOffset, menuY + 4 * mult);
+    std::cout << "[4] Quit" << std::flush;
+
+    setConsoleColor(7);
+    gotoXY(menuX - 4, menuY + 5 * mult);
+    std::cout << "==============================================================" << std::flush;
+    gotoXY(menuX + 13, menuY + 6 * mult);
+    std::cout << "Press a number to continue" << std::flush;
 
     setConsoleColor(8);
-    std::cout << "\n\n\n\n\n\n";
-    std::cout << "                                                                                                                                                                    made by nazzony";
+    gotoXY(menuX + textOffset + 50, menuY + 26);
+    std::cout << " made by nazzony" << std::flush;
+
     setConsoleColor(7);
 
     char choice = _getch();

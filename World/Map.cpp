@@ -14,9 +14,12 @@ Map::Map() {
     }
 }
 
-void Map::render() {
+void Map::render(int startX, int startY) {
 
     for (int y = 0; y < roomGrid.size(); ++y) {
+
+        gotoXY(startX, startY + y);
+
         for (int x = 0; x < roomGrid[y].size(); ++x) {
 
             if (explored[y][x] == true) {
@@ -36,12 +39,12 @@ void Map::render() {
                     setConsoleColor(14);
                 }
 
-                std::cout << roomGrid[y][x] << " ";
+                std::cout << roomGrid[y][x] << " " << std::flush;
             } else {
                 std::cout << "  ";
             }
         }
-        std::cout << std::endl;
+        std::cout << std::flush;
     }
     setConsoleColor(7);
 
