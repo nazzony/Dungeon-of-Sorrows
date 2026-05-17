@@ -1,7 +1,6 @@
 #ifndef DUNGEON_OF_SORROWS_GAMEENGINE_H
 #define DUNGEON_OF_SORROWS_GAMEENGINE_H
 
-#include "GameEngine.h"
 #include "Game.h"
 #include "../utilities.h"
 #include <iostream>

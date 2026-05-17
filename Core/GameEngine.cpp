@@ -23,7 +23,7 @@ void GameEngine::stateMainMenu() {
 
     //for clion use 0
     //for bash use 1
-    bool terminal = 0;
+    bool terminal = 1;
     int menuX;
     int menuY;
     int mult;
